@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKU Optimization</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <svg class="logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="#ffffff" opacity="0.2"/>
+                        <text x="20" y="28" font-size="24" font-weight="bold" fill="white" text-anchor="middle">SKU</text>
+                    </svg>
+                    <h1>SKU Optimization</h1>
+                </div>
+                <p class="subtitle">Optimize your inventory with intelligent data analysis</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section card">
+                <div class="section-header">
+                    <h2>Upload Your Data</h2>
+                    <p>Import your Excel file to begin analysis</p>
+                </div>
+
+                <div class="upload-area" id="uploadArea">
+                    <svg class="upload-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor"/>
+                    </svg>
+                    <h3>Drag and drop your Excel file here</h3>
+                    <p>or</p>
+                    <label class="file-label">
+                        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" hidden>
+                        <span class="file-button">Browse Files</span>
+                    </label>
+                    <p class="file-formats">Supported formats: .xlsx, .xls, .csv</p>
+                </div>
+
+                <div id="fileInfo" class="file-info" style="display: none;">
+                    <div class="file-details">
+                        <svg class="file-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" fill="currentColor"/>
+                            <polyline points="14 2 14 8 20 8" fill="currentColor"/>
+                        </svg>
+                        <div class="file-text">
+                            <p id="fileName" class="file-name"></p>
+                            <p id="fileSize" class="file-size"></p>
+                        </div>
+                        <button type="button" class="remove-btn" id="removeFile">✕</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Preview Section -->
+            <section class="preview-section card" id="previewSection" style="display: none;">
+                <div class="section-header">
+                    <h2>Data Preview</h2>
+                    <p>First few rows of your uploaded file</p>
+                </div>
+                <div class="table-wrapper">
+                    <table id="previewTable" class="preview-table">
+                        <thead id="tableHead"></thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Analysis Section -->
+            <section class="analysis-section card">
+                <div class="section-header">
+                    <h2>Analysis Configuration</h2>
+                    <p>Select parameters for SKU optimization</p>
+                </div>
+
+                <div class="config-grid">
+                    <div class="config-group">
+                        <label for="analysisType">Analysis Type</label>
+                        <select id="analysisType">
+                            <option value="profitability">Profitability Analysis</option>
+                            <option value="demand">Demand Forecasting</option>
+                            <option value="inventory">Inventory Turnover</option>
+                            <option value="abc">ABC Classification</option>
+                            <option value="combined">Combined Analysis</option>
+                        </select>
+                    </div>
+
+                    <div class="config-group">
+                        <label for="timeframe">Time Period</label>
+                        <select id="timeframe">
+                            <option value="monthly">Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+
+                    <div class="config-group">
+                        <label for="threshold">Low Performance Threshold (%)</label>
+                        <input type="number" id="threshold" min="0" max="100" value="20">
+                    </div>
+
+                    <div class="config-group">
+                        <label for="recommendations">Generate Recommendations</label>
+                        <select id="recommendations">
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button id="runAnalysisBtn" class="btn btn-primary" disabled>
+                        <span class="btn-text">Run Analysis</span>
+                        <span class="btn-icon">▶</span>
+                    </button>
+                    <button id="clearAllBtn" class="btn btn-secondary">Clear All</button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section card" id="resultsSection" style="display: none;">
+                <div class="section-header">
+                    <h2>Analysis Results</h2>
+                    <p>Optimization insights and recommendations</p>
+                </div>
+
+                <div class="results-grid">
+                    <div class="result-card metric-card">
+                        <h3>Total SKUs Analyzed</h3>
+                        <p id="totalSkus" class="metric-value">0</p>
+                    </div>
+                    <div class="result-card metric-card">
+                        <h3>High Performers</h3>
+                        <p id="highPerformers" class="metric-value success">0</p>
+                    </div>
+                    <div class="result-card metric-card">
+                        <h3>Mid Performers</h3>
+                        <p id="midPerformers" class="metric-value warning">0</p>
+                    </div>
+                    <div class="result-card metric-card">
+                        <h3>Low Performers</h3>
+                        <p id="lowPerformers" class="metric-value danger">0</p>
+                    </div>
+                </div>
+
+                <div class="recommendations-section">
+                    <h3>Key Recommendations</h3>
+                    <ul id="recommendationsList" class="recommendations-list"></ul>
+                </div>
+
+                <div class="export-section">
+                    <button id="exportBtn" class="btn btn-export">
+                        <span>📥 Export Report</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Status Message -->
+            <div id="statusMessage" class="status-message" style="display: none;"></div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 SKU Optimization. Maximize your inventory efficiency.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
